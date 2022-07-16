@@ -1,6 +1,8 @@
 package ru.netology.transfermoney.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.netology.transfermoney.exceptions.InputDataException;
 import ru.netology.transfermoney.model.ConfirmOperationRequest;
@@ -9,8 +11,11 @@ import ru.netology.transfermoney.model.TransferRequest;
 import ru.netology.transfermoney.repository.TransferRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+@Log
 @Service
 @AllArgsConstructor
 public class TransferService {
@@ -62,10 +67,13 @@ public class TransferService {
         if (amount <= 0) {
             throw new InputDataException("Необходимо указать сумму перевода");
         }
-
+        int commission = (int) (amount * 0.01);
         final String transferId = Integer.toString(transferRepository.getOperationId());
         transferRepository.addTransfer(transferId, transferRequest);
         transferRepository.addCode(transferId, UUID.randomUUID().toString());
+        log.info("[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) + " " + "] " +
+                "Новый перевод: СardFrom " + cardFrom + ", CardTo " + cardTo +
+                ", amount " + amount + ", commission " + commission + "\n");
         return new TransferResponse(transferId);
     }
 
@@ -74,9 +82,12 @@ public class TransferService {
 
         final TransferRequest transferRequest = transferRepository.removeTransfer(operationId);
         if (transferRequest == null) {
-            throw new InputDataException("Операция не найдена");
+            ResponseEntity.badRequest().body("Данные отсутствуют");
         }
         final String code = transferRepository.removeCode(operationId);
+        log.info("[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) + " " + "] " +
+                "Перевод одобрен: OperationId "+ operationId + ",code " + code);
+
         return new TransferResponse(operationId);
     }
 }
