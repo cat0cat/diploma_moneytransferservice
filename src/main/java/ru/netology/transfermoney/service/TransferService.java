@@ -28,10 +28,10 @@ public class TransferService {
         final String period =  transferRequest.getCardFromValidTill();
         final Integer amount = transferRequest.getAmount().getValue();
 
-        CardCheck(cardFrom, cardTo);
-        CVVCheck(cvv);
-        DateCheck(period);
-        AmountCheck(amount);
+        cardCheck(cardFrom, cardTo);
+        cvvCheck(cvv);
+        dateCheck(period);
+        amountCheck(amount);
 
         int commission = (int) (amount * 0.01);
         final String transferId = Integer.toString(transferRepository.getOperationId());
@@ -57,7 +57,7 @@ public class TransferService {
         return new TransferResponse(operationId);
     }
 
-    private void CardCheck (String cardFrom, String cardTo) {
+    private void cardCheck (String cardFrom, String cardTo) {
         // проверка номеров карт
         if (cardFrom == null){
             throw new InputDataException("Номер карты отправителя обязателен");
@@ -70,7 +70,7 @@ public class TransferService {
         }
     }
 
-    private void CVVCheck (String cvv) {
+    private void cvvCheck (String cvv) {
         //проверка CVV
         if (cvv == null) {
             throw new InputDataException("CVC / CVC2 номер карты отправителя обязателен");
@@ -79,7 +79,7 @@ public class TransferService {
         }
     }
 
-    private void DateCheck (String period) {
+    private void dateCheck (String period) {
         // проверка корректности даты
         StringBuilder sb = new StringBuilder(period);
         int cardMonth = Integer.parseInt(sb.substring(0, 2 ));
@@ -98,11 +98,12 @@ public class TransferService {
         }
     }
 
-    private void AmountCheck (Integer amount) {
+    private void amountCheck (Integer amount) {
         // проверка заполнения суммы перевода
         if (amount <= 0) {
             throw new InputDataException("Необходимо указать сумму перевода");
         }
     }
+
 
 }
