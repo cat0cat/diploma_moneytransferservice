@@ -9,19 +9,18 @@ import ru.netology.transfermoney.model.TransferResponse;
 import ru.netology.transfermoney.model.TransferRequest;
 import ru.netology.transfermoney.service.TransferService;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @AllArgsConstructor
 public class TransferController {
     private final TransferService service;
 
     @PostMapping("/transfer")
-    @CrossOrigin(origins = "http://localhost:3000")
     public TransferResponse transfer(@RequestBody TransferRequest transferRequest) {
         return service.transfer(transferRequest);
     }
 
     @PostMapping("/confirmOperation")
-    @CrossOrigin(origins = "http://localhost:3000")
     public TransferResponse confirmOperation(@RequestBody ConfirmOperationRequest confirmOperationRequest) {
         return service.confirmOperation(confirmOperationRequest);
     }
