@@ -86,10 +86,9 @@ public class TransferService {
         if (cardMonth > 12){
             throw new InputDataException("Текущий месяц не может быть больше 12");
         }
-
         // проверка срока действия карты
         int cardYear = Integer.parseInt("20" + sb.substring(3, 5 ));
-        if (LocalDate.now().getYear() >= cardYear) {
+        if (LocalDate.now().getYear() <= cardYear) {
             if (LocalDate.now().getMonthValue() > cardMonth) {
                 throw new InputDataException("Истекла дата действия карты отправителя");
             }
