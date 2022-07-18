@@ -24,8 +24,8 @@ import java.util.Objects;
 class TransferMoneyApplicationTests {
 
     private static final String HOST = "http://localhost:";
-    private static final String ENDPOINT = "/transfer";
-    private static final String ENDPOINT_2 = "/confirmOperation";
+    private static final String ENDPOINT_TRANSFER = "/transfer";
+    private static final String ENDPOINT_CONFIRM = "/confirmOperation";
     private static final int PORT = 5500;
     public static final String OPERATION_ID = "1";
     private static final String CODE = "1234";
@@ -51,14 +51,14 @@ class TransferMoneyApplicationTests {
     @Test
     void contextLoads() throws JSONException {
         ResponseEntity<Object> forTransfer = restTemplate.postForEntity(HOST + container.getMappedPort(PORT) +
-                ENDPOINT, TRANSFER_REQUEST, Object.class);
-        JSONObject json = new JSONObject(Objects.requireNonNull(forTransfer.getBody()).toString());
-        Assertions.assertEquals(json.get("operationId").toString(), OPERATION_ID);
+                ENDPOINT_TRANSFER, TRANSFER_REQUEST, Object.class);
+        JSONObject jsonTransfer = new JSONObject(Objects.requireNonNull(forTransfer.getBody()).toString());
+        Assertions.assertEquals(jsonTransfer.get("operationId").toString(), OPERATION_ID);
 
         ResponseEntity<Object> forConfirmOperation = restTemplate.postForEntity(HOST + container.getMappedPort(PORT) +
-                ENDPOINT_2, CONFIRM_OPERATION_REQUEST, Object.class);
-        JSONObject json2 = new JSONObject(Objects.requireNonNull(forConfirmOperation.getBody()).toString());
-        Assertions.assertEquals(json2.get("operationId").toString(), OPERATION_ID);
+                ENDPOINT_CONFIRM, CONFIRM_OPERATION_REQUEST, Object.class);
+        JSONObject jsonConfirm = new JSONObject(Objects.requireNonNull(forConfirmOperation.getBody()).toString());
+        Assertions.assertEquals(jsonConfirm.get("operationId").toString(), OPERATION_ID);
 
     }
 
