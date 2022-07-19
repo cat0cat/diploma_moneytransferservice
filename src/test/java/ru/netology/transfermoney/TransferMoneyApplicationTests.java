@@ -49,17 +49,19 @@ class TransferMoneyApplicationTests {
 
 
     @Test
-    void contextLoads() throws JSONException {
+    void contextLoadsTransfer() throws JSONException {
         ResponseEntity<Object> forTransfer = restTemplate.postForEntity(HOST + container.getMappedPort(PORT) +
                 ENDPOINT_TRANSFER, TRANSFER_REQUEST, Object.class);
         JSONObject jsonTransfer = new JSONObject(Objects.requireNonNull(forTransfer.getBody()).toString());
         Assertions.assertEquals(jsonTransfer.get("operationId").toString(), OPERATION_ID);
+    }
 
+    @Test
+    void contextLoadsConfirmOperation() throws JSONException {
         ResponseEntity<Object> forConfirmOperation = restTemplate.postForEntity(HOST + container.getMappedPort(PORT) +
                 ENDPOINT_CONFIRM, CONFIRM_OPERATION_REQUEST, Object.class);
         JSONObject jsonConfirm = new JSONObject(Objects.requireNonNull(forConfirmOperation.getBody()).toString());
         Assertions.assertEquals(jsonConfirm.get("operationId").toString(), OPERATION_ID);
-
     }
 
 }
